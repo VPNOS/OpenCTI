@@ -273,23 +273,23 @@ services:
     depends_on:
       opencti:
         condition: service_healthy
-  connector-greynoise:
-    image: opencti/connector-greynoise:6.8.13
-    environment:
-      - OPENCTI_URL=http://opencti:8080
-      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      - CONNECTOR_ID=${CONNECTOR_GREYNOISE_ID}
-      - CONNECTOR_NAME=GreyNoise
-      - CONNECTOR_SCOPE=IPv4-Addr
-      - CONNECTOR_AUTO=true
-      - CONNECTOR_LOG_LEVEL=info
-      - GREYNOISE_KEY=${GREYNOISE_API_KEY}
-      - GREYNOISE_MAX_TLP=TLP:AMBER
-      - GREYNOISE_SIGHTING_NOT_SEEN=false
-    restart: always
-    depends_on:
-      opencti:
-        condition: service_healthy
+  # connector-greynoise:
+  #   image: opencti/connector-greynoise:6.8.13
+  #   environment:
+  #     - OPENCTI_URL=http://opencti:8080
+  #     - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+  #     - CONNECTOR_ID=${CONNECTOR_GREYNOISE_ID}
+  #     - CONNECTOR_NAME=GreyNoise
+  #     - CONNECTOR_SCOPE=IPv4-Addr
+  #     - CONNECTOR_AUTO=true
+  #     - CONNECTOR_LOG_LEVEL=info
+  #     - GREYNOISE_KEY=${GREYNOISE_API_KEY}
+  #     - GREYNOISE_MAX_TLP=TLP:AMBER
+  #     - GREYNOISE_SIGHTING_NOT_SEEN=false
+  #   restart: always
+  #   depends_on:
+  #     opencti:
+  #       condition: service_healthy
   connector-hybrid-analysis-sandbox:
     image: opencti/connector-hybrid-analysis-sandbox:6.8.13
     environment:
@@ -478,21 +478,21 @@ services:
     depends_on:
       opencti:
         condition: service_healthy
-  connector-anyrun-feed:
-    image: opencti/connector-anyrun-feed:6.8.13
-    environment:
-      - OPENCTI_URL=http://opencti:8080
-      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      - CONNECTOR_ID=${CONNECTOR_ANYRUN_FEED_ID}
-      - CONNECTOR_NAME=ANY.RUN feed
-      - CONNECTOR_SCOPE=stix2
-      - CONNECTOR_LOG_LEVEL=info
-      - CONNECTOR_RUN_EVERY=1d
-      - ANYRUN_TI_TOKEN=${ANYRUN_TI_TOKEN}
-    restart: always
-    depends_on:
-      opencti:
-        condition: service_healthy
+  # connector-anyrun-feed:
+  #   image: opencti/connector-anyrun-feed:6.8.13
+  #   environment:
+  #     - OPENCTI_URL=http://opencti:8080
+  #     - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+  #     - CONNECTOR_ID=${CONNECTOR_ANYRUN_FEED_ID}
+  #     - CONNECTOR_NAME=ANY.RUN feed
+  #     - CONNECTOR_SCOPE=stix2
+  #     - CONNECTOR_LOG_LEVEL=info
+  #     - CONNECTOR_RUN_EVERY=1d
+  #     - ANYRUN_TI_TOKEN=${ANYRUN_TI_TOKEN}
+  #   restart: always
+  #   depends_on:
+  #     opencti:
+  #       condition: service_healthy
   connector-crtsh:
     image: opencti/connector-crtsh:6.8.13
     environment:
