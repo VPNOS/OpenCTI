@@ -257,7 +257,386 @@ services:
       rabbitmq:
         condition: service_healthy
     restart: always
-
+  connector-abuseipdb:
+    image: opencti/connector-abuseipdb:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_ABUSEIPDB_ID}
+      - CONNECTOR_NAME=AbuseIPDB
+      - CONNECTOR_SCOPE=IPv4-Addr
+      - CONNECTOR_AUTO=true
+      - CONNECTOR_LOG_LEVEL=info
+      - ABUSEIPDB_API_KEY=${ABUSEIPDB_API_KEY}
+      - ABUSEIPDB_MAX_TLP=TLP:AMBER
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-greynoise:
+    image: opencti/connector-greynoise:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_GREYNOISE_ID}
+      - CONNECTOR_NAME=GreyNoise
+      - CONNECTOR_SCOPE=IPv4-Addr
+      - CONNECTOR_AUTO=true
+      - CONNECTOR_LOG_LEVEL=info
+      - GREYNOISE_KEY=${GREYNOISE_API_KEY}
+      - GREYNOISE_MAX_TLP=TLP:AMBER
+      - GREYNOISE_SIGHTING_NOT_SEEN=false
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-hybrid-analysis-sandbox:
+    image: opencti/connector-hybrid-analysis-sandbox:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_HYBRID_ANALYSIS_ID}
+      - CONNECTOR_NAME=Hybrid Analysis Sandbox
+      - CONNECTOR_SCOPE=StixFile,Artifact,Url,Domain-Name,Hostname
+      - CONNECTOR_AUTO=true
+      - CONNECTOR_CONFIDENCE_LEVEL=50
+      - CONNECTOR_LOG_LEVEL=info
+      - HYBRID_ANALYSIS_TOKEN=${HYBRID_ANALYSIS_API_TOKEN}
+      - HYBRID_ANALYSIS_ENVIRONMENT_ID=160
+      - HYBRID_ANALYSIS_MAX_TLP=TLP:AMBER
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-virustotal:
+    image: opencti/connector-virustotal:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_VIRUSTOTAL_ID}
+      - CONNECTOR_NAME=VirusTotal
+      - CONNECTOR_SCOPE=StixFile,Artifact,IPv4-Addr,Domain-Name,Url,Hostname
+      - CONNECTOR_AUTO=true
+      - CONNECTOR_LOG_LEVEL=info
+      - VIRUSTOTAL_TOKEN=${VIRUSTOTAL_API_TOKEN}
+      - VIRUSTOTAL_MAX_TLP=TLP:AMBER
+      - VIRUSTOTAL_REPLACE_WITH_LOWER_SCORE=false
+      - VIRUSTOTAL_FILE_CREATE_NOTE_FULL_REPORT=true
+      - VIRUSTOTAL_FILE_UPLOAD_UNSEEN_ARTIFACTS=true
+      - VIRUSTOTAL_FILE_INDICATOR_CREATE_POSITIVES=10
+      - VIRUSTOTAL_FILE_INDICATOR_VALID_MINUTES=2880
+      - VIRUSTOTAL_FILE_INDICATOR_DETECT=true
+      - VIRUSTOTAL_IP_INDICATOR_CREATE_POSITIVES=10
+      - VIRUSTOTAL_IP_INDICATOR_VALID_MINUTES=2880
+      - VIRUSTOTAL_IP_INDICATOR_DETECT=true
+      - VIRUSTOTAL_IP_ADD_RELATIONSHIPS=true
+      - VIRUSTOTAL_DOMAIN_INDICATOR_CREATE_POSITIVES=10
+      - VIRUSTOTAL_DOMAIN_INDICATOR_VALID_MINUTES=2880
+      - VIRUSTOTAL_DOMAIN_INDICATOR_DETECT=true
+      - VIRUSTOTAL_DOMAIN_ADD_RELATIONSHIPS=true
+      - VIRUSTOTAL_URL_UPLOAD_UNSEEN=true
+      - VIRUSTOTAL_URL_INDICATOR_CREATE_POSITIVES=10
+      - VIRUSTOTAL_URL_INDICATOR_VALID_MINUTES=2880
+      - VIRUSTOTAL_URL_INDICATOR_DETECT=true
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-urlscan-enrichment:
+    image: opencti/connector-urlscan-enrichment:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_URLSCAN_ID}
+      - CONNECTOR_NAME=Urlscan
+      - CONNECTOR_SCOPE=url,ipv4-addr,ipv6-addr
+      - CONNECTOR_AUTO=true
+      - CONNECTOR_LOG_LEVEL=info
+      - URLSCAN_ENRICHMENT_API_KEY=${URLSCAN_API_KEY}
+      - URLSCAN_ENRICHMENT_API_BASE_URL=https://urlscan.io/api/v1/
+      - URLSCAN_ENRICHMENT_IMPORT_SCREENSHOT=true
+      - URLSCAN_ENRICHMENT_VISIBILITY=public
+      - URLSCAN_ENRICHMENT_SEARCH_FILTERED_BY_DATE=>now-1y
+      - URLSCAN_ENRICHMENT_MAX_TLP=TLP:AMBER
+      - URLSCAN_ENRICHMENT_CREATE_INDICATOR=true
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-yara:
+    image: opencti/connector-yara:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_YARA_ID}
+      - CONNECTOR_NAME=YARA
+      - CONNECTOR_SCOPE=Artifact
+      - CONNECTOR_AUTO=true
+      - CONNECTOR_CONFIDENCE_LEVEL=100
+      - CONNECTOR_LOG_LEVEL=info
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-shodan:
+    image: opencti/connector-shodan:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_SHODAN_ID}
+      - CONNECTOR_NAME=Shodan
+      - CONNECTOR_SCOPE=IPv4-Addr,Indicator
+      - CONNECTOR_AUTO=true
+      - CONNECTOR_LOG_LEVEL=info
+      - SHODAN_TOKEN=${SHODAN_API_TOKEN}
+      - SHODAN_MAX_TLP=TLP:AMBER
+      - SHODAN_DEFAULT_SCORE=50
+      - SHODAN_IMPORT_SEARCH_RESULTS=true
+      - SHODAN_CREATE_NOTE=true
+      - SHODAN_USE_ISP_NAME_FOR_ASN=false
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-shodan-internetdb:
+    image: opencti/connector-shodan-internetdb:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_SHODAN_INTERNETDB_ID}
+      - CONNECTOR_NAME=Shodan InternetDB
+      - CONNECTOR_SCOPE=IPv4-Addr
+      - CONNECTOR_AUTO=true
+      - CONNECTOR_LOG_LEVEL=info
+      - SHODAN_MAX_TLP=TLP:CLEAR
+      - SHODAN_SSL_VERIFY=true
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-abuse-ssl:
+    image: opencti/connector-abuse-ssl:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_ABUSE_SSL_ID}
+      - CONNECTOR_NAME=Abuse.ch SSL Blacklist
+      - CONNECTOR_SCOPE=abusessl
+      - CONNECTOR_LOG_LEVEL=info
+      - ABUSESSL_URL=https://sslbl.abuse.ch/blacklist/sslipblacklist.csv
+      - ABUSESSL_INTERVAL=360
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-abuseipdb-ipblacklist:
+    image: opencti/connector-abuseipdb-ipblacklist:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_ABUSEIPDB_IPBLACKLIST_ID}
+      - CONNECTOR_NAME=AbuseIPDB IP Blacklist
+      - CONNECTOR_SCOPE=abuseipdb
+      - CONNECTOR_LOG_LEVEL=info
+      - CONNECTOR_DURATION_PERIOD=PT12H
+      - ABUSEIPDB_API_KEY=${ABUSEIPDB_IPBLACKLIST_API_KEY}
+      - ABUSEIPDB_TLP_LEVEL=clear
+      - ABUSEIPDB_SCORE=75
+      - ABUSEIPDB_IPVERSION=4
+      - ABUSEIPDB_CREATE_INDICATOR=true
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-alienvault:
+    image: opencti/connector-alienvault:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_ALIENVAULT_ID}
+      - CONNECTOR_NAME=AlienVault
+      - CONNECTOR_SCOPE=alienvault
+      - CONNECTOR_LOG_LEVEL=info
+      - CONNECTOR_DURATION_PERIOD=PT30M
+      - ALIENVAULT_BASE_URL=https://otx.alienvault.com
+      - ALIENVAULT_API_KEY=${ALIENVAULT_API_KEY}
+      - ALIENVAULT_TLP=White
+      - ALIENVAULT_CREATE_OBSERVABLES=true
+      - ALIENVAULT_CREATE_INDICATORS=true
+      - ALIENVAULT_PULSE_START_TIMESTAMP=2022-05-01T00:00:00
+      - ALIENVAULT_REPORT_TYPE=threat-report
+      - ALIENVAULT_REPORT_STATUS=New
+      - ALIENVAULT_GUESS_MALWARE=false
+      - ALIENVAULT_GUESS_CVE=false
+      - ALIENVAULT_EXCLUDED_PULSE_INDICATOR_TYPES=FileHash-MD5,FileHash-SHA1
+      - ALIENVAULT_ENABLE_RELATIONSHIPS=true
+      - ALIENVAULT_ENABLE_ATTACK_PATTERNS_INDICATES=false
+      - ALIENVAULT_FILTER_INDICATORS=false
+      - ALIENVAULT_INTERVAL_SEC=1800
+      - ALIENVAULT_DEFAULT_X_OPENCTI_SCORE=50
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-anyrun-feed:
+    image: opencti/connector-anyrun-feed:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_ANYRUN_FEED_ID}
+      - CONNECTOR_NAME=ANY.RUN feed
+      - CONNECTOR_SCOPE=stix2
+      - CONNECTOR_LOG_LEVEL=info
+      - CONNECTOR_RUN_EVERY=1d
+      - ANYRUN_TI_TOKEN=${ANYRUN_TI_TOKEN}
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-crtsh:
+    image: opencti/connector-crtsh:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_CRTSH_ID}
+      - CONNECTOR_NAME=${CRTSH_CONNECTOR_NAME}
+      - CONNECTOR_SCOPE=${CRTSH_CONNECTOR_SCOPE}
+      - CONNECTOR_LOG_LEVEL=info
+      - CONNECTOR_RUN_EVERY=${CRTSH_RUN_EVERY}
+      - CRTSH_DOMAIN=${CRTSH_DOMAIN}
+      - CRTSH_LABELS=${CRTSH_LABELS}
+      - CRTSH_MARKING_REFS=${CRTSH_MARKING_REFS}
+      - CRTSH_IS_EXPIRED=${CRTSH_IS_EXPIRED}
+      - CRTSH_IS_WILDCARD=${CRTSH_IS_WILDCARD}
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-malwarebazaar:
+    image: opencti/connector-malwarebazaar:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_MALWAREBAZAAR_ID}
+      - CONNECTOR_TYPE=EXTERNAL_IMPORT
+      - CONNECTOR_NAME=MalwareBazaar
+      - CONNECTOR_SCOPE=StixFile
+      - CONNECTOR_LOG_LEVEL=info
+      - CONNECTOR_DURATION_PERIOD=PT50M
+      - MALWAREBAZAAR_API_BASE_URL=https://mb-api.abuse.ch/api/v1/
+      - MALWAREBAZAAR_API_KEY=${MALWAREBAZAAR_API_KEY}
+      - MALWAREBAZAAR_TLP_LEVEL=clear
+      - MALWAREBAZAAR_X_OPENCTI_SCORE=100
+      - MALWAREBAZAAR_INCLUDE_TAGS=exe,dll,docm,docx,doc,xls,xlsx,xlsm,js
+      - MALWAREBAZAAR_INCLUDE_REPORTERS=
+      - MALWAREBAZAAR_LABELS=malware-bazaar
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-malwarebazaar-recent-additions:
+    image: opencti/connector-malwarebazaar-recent-additions:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_MALWAREBAZAAR_RECENT_ID}
+      - CONNECTOR_NAME=MalwareBazaar Recent Additions
+      - CONNECTOR_LOG_LEVEL=info
+      - MALWAREBAZAAR_RECENT_ADDITIONS_API_URL=https://mb-api.abuse.ch/api/v1/
+      - MALWAREBAZAAR_RECENT_ADDITIONS_API_KEY=${MALWAREBAZAAR_RECENT_API_KEY}
+      - MALWAREBAZAAR_RECENT_ADDITIONS_COOLDOWN_SECONDS=300
+      - MALWAREBAZAAR_RECENT_ADDITIONS_INCLUDE_TAGS=exe,dll,docm,docx,doc,xls,xlsx,xlsm,js
+      - MALWAREBAZAAR_RECENT_ADDITIONS_INCLUDE_REPORTERS=
+      - MALWAREBAZAAR_RECENT_ADDITIONS_LABELS=malware-bazaar
+      - MALWAREBAZAAR_RECENT_ADDITIONS_LABELS_COLOR=#54483b
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-tweetfeed:
+    image: opencti/connector-tweetfeed:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_TWEETFEED_ID}
+      - CONNECTOR_NAME=Tweetfeed
+      - CONNECTOR_SCOPE=tweetfeed
+      - CONNECTOR_LOG_LEVEL=info
+      - TWEETFEED_CONFIDENCE_LEVEL=15
+      - TWEETFEED_CREATE_INDICATORS=true
+      - TWEETFEED_CREATE_OBSERVABLES=true
+      - TWEETFEED_INTERVAL=1
+      - TWEETFEED_UPDATE_EXISTING_DATA=true
+      - TWEETFEED_ORG_DESCRIPTION=Tweetfeed, a connector to import IOC from Twitter.
+      - TWEETFEED_ORG_NAME=Tweetfeed
+      - TWEETFEED_DAYS_BACK_IN_TIME=30
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-urlhaus:
+    image: opencti/connector-urlhaus:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_URLHAUS_ID}
+      - CONNECTOR_NAME=Abuse.ch URLhaus
+      - CONNECTOR_SCOPE=urlhaus
+      - CONNECTOR_LOG_LEVEL=info
+      - URLHAUS_INTERVAL=3
+      - URLHAUS_CSV_URL=https://urlhaus.abuse.ch/downloads/csv_recent/
+      - URLHAUS_DEFAULT_X_OPENCTI_SCORE=80
+      - URLHAUS_IMPORT_OFFLINE=true
+      - URLHAUS_THREATS_FROM_LABELS=true
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-urlhaus-recent-payloads:
+    image: opencti/connector-urlhaus-recent-payloads:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_URLHAUS_RECENT_ID}
+      - CONNECTOR_NAME=URLhaus Recent Payloads
+      - CONNECTOR_LOG_LEVEL=info
+      - URLHAUS_RECENT_PAYLOADS_API_URL=https://urlhaus-api.abuse.ch/v1/
+      - URLHAUS_RECENT_PAYLOADS_API_KEY=${URLHAUS_RECENT_API_KEY}
+      - URLHAUS_RECENT_PAYLOADS_COOLDOWN_SECONDS=300
+      - URLHAUS_RECENT_PAYLOADS_INCLUDE_FILETYPES=exe,dll,docm,docx,doc,xls,xlsx,xlsm,js,xll
+      - URLHAUS_RECENT_PAYLOADS_INCLUDE_SIGNATURES=
+      - URLHAUS_RECENT_PAYLOADS_SKIP_UNKNOWN_FILETYPES=true
+      - URLHAUS_RECENT_PAYLOADS_SKIP_NULL_SIGNATURE=true
+      - URLHAUS_RECENT_PAYLOADS_LABELS=urlhaus
+      - URLHAUS_RECENT_PAYLOADS_LABELS_COLOR=#54483b
+      - URLHAUS_RECENT_PAYLOADS_SIGNATURE_LABEL_COLOR=#0059f7
+      - URLHAUS_RECENT_PAYLOADS_FILETYPE_LABEL_COLOR=#54483b
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+  connector-urlscan-import:
+    image: opencti/connector-urlscan:6.8.13
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_URLSCAN_IMPORT_ID}
+      - CONNECTOR_NAME=Urlscan Import
+      - CONNECTOR_SCOPE=urlscan
+      - CONNECTOR_LOG_LEVEL=info
+      - CONNECTOR_CREATE_INDICATORS=true
+      - CONNECTOR_TLP=white
+      - CONNECTOR_LABELS=Phishing,Phishfeed
+      - CONNECTOR_INTERVAL=86400
+      - CONNECTOR_LOOKBACK=3
+      - URLSCAN_URL=https://urlscan.io/api/v1/pro/phishfeed?format=json
+      - URLSCAN_API_KEY=${URLSCAN_IMPORT_API_KEY}
+      - URLSCAN_DEFAULT_X_OPENCTI_SCORE=50
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+ 
 volumes:
   esdata:
   s3data:
